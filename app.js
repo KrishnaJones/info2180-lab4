@@ -1,35 +1,30 @@
-window.addEventListener('load', function() 
-{
-    let searchBtn = document.querySelector('#searchBtn');
+window.onload = function(){
+    var searchBtn = document.querySelector("button")
+    var httpRequest
+    var link = "http://localhost/info2180-lab4/superheroes.php"
 
-    searchBtn.addEventListener('click', function(element) 
-    {
-        element.preventDefault();
+    var textField = document.querySelector("input") 
+    var resultBox = document.querySelector("#result")
 
-        fetch("superheroes.php")
+    searchBtn.addEventListener("click", function(e){
+        e.preventDefault()
 
-            .then(response => 
-            {
+        httpRequest = new XMLHttpRequest()
 
-                if (response.ok) 
-                {
-                    return response.text()
-                } 
-
-                else 
-                {
-                    return Promise.reject('something went wrong!')
+        httpRequest.onreadystatechange = function(){
+            if (httpRequest.readyState == 4){
+                if (httpRequest.status === 200){
+                    
+                    var response = httpRequest.responseText
+                    // alert(response)
+                    resultBox.innerHTML = response
+                } else{
+                    //alert(":( Something went wrong...")
+                    resultBox.innerHTML = "Something went wrong :("
                 }
+            }
 
-            })
-
-            .then(data => 
-            {
-                let quote = document.querySelector('#quote');
-                quote.innerHTML = data;
-            })
-
-            .catch(error => console.log('There was an error: ' + error));
-
-    });
-});
+            
+        }
+        httpRequest.open("GET", link + "?query=" + textField.value)
+            httpRequest.send()
