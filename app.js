@@ -1,30 +1,29 @@
-window.onload = function(){
-    var searchBtn = document.querySelector("button")
-    var httpRequest
-    var link = "http://localhost/info2180-lab4/superheroes.php"
+window.onload = function ()
+{
+    let searchBtn = document.querySelector("button");
+    let searchIpt = document.querySelector("input");
 
-    var textField = document.querySelector("input") 
-    var resultBox = document.querySelector("#result")
+    searchBtn.addEventListener('click', function (event)
+    {
+        event.preventDefault();
+        const input = searchIpt.value.trim();
+        console.log(input);
 
-    searchBtn.addEventListener("click", function(e){
-        e.preventDefault()
+        const httpRequest = new XMLHttpRequest();
+        const url = `superheroes.php?query=${input}`;
 
-        httpRequest = new XMLHttpRequest()
-
-        httpRequest.onreadystatechange = function(){
-            if (httpRequest.readyState == 4){
-                if (httpRequest.status === 200){
-                    
-                    var response = httpRequest.responseText
-                    // alert(response)
-                    resultBox.innerHTML = response
-                } else{
-                    //alert(":( Something went wrong...")
-                    resultBox.innerHTML = "Something went wrong :("
+        httpRequest.onreadystatechange = function ()
+        {
+            if (httpRequest.readyState === XMLHttpRequest.DONE)
+            {
+                if (httpRequest.status === 200)
+                {
+                    document.getElementById("result").innerHTML = httpRequest.responseText;
                 }
             }
+        };
 
-            
-        }
-        httpRequest.open("GET", link + "?query=" + textField.value)
-            httpRequest.send()
+        httpRequest.open('GET', url);
+        httpRequest.send();
+    });
+};
